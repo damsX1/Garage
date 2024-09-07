@@ -1,0 +1,50 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Client{% endblock %}
+
+{% block content %}
+
+    <div class="title">Facture</div>
+
+    <div class="table-container">
+
+        <div class="searchbar">
+            <i class='bx bx-search-alt-2'></i>
+            <input type="text" id="searchBar" onkeyup="searchBar()" placeholder="Recherchez ...">
+        </div>
+        
+        <div class="table">
+            <table id="table-content">
+                <tr>
+                    <th class="id">ID</th>
+                    <th class="id">Client</th>
+                    <th class="id">OR</th>
+                    <th class="id">Montant</th>
+                    <th class="id">Statut</th>
+                    <th class="action">Action</th>
+                </tr>
+
+                {% for invoice in invoices %}
+                <tr>
+                    <td class="id"># {{ invoice.number_id }}</td>
+                    <td class="id">{{ invoice.order.vehicle.customer }}</td>
+                    <td class="id"># {{ invoice.order.id }}</td>
+                    <td class="id">{{ invoice.totalTVAC }} €</td>
+                    <td class="id status">
+                        {% if invoice.status == 'paid' %}<div class="paid">Payé</div>{% endif %}
+                        {% if invoice.status == 'unpaid' %}<div class="unpaid">Non Payé</div>{% endif %}
+                    </td>
+                    <td class="action">
+                        <a href="/viewinvoice/{{invoice.id}}"><i class='bx bx-show'></i></a>
+                        <a href="/editinvoice/{{invoice.id}}"><i class='bx bx-pencil'></i></a>
+                        <a href="/deleteinvoice/{{invoice.id}}"><i class='bx bx-trash'></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+
+
+{% endblock %}

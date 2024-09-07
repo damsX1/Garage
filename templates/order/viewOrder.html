@@ -1,0 +1,83 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Ordre de réparation{% endblock %}
+
+{% block content %}
+
+    <div class="title">Informations ordre de réparation # {{ order.id }}</div>
+
+    <div class="button-container">
+        <a href="/showorder/{{order.id}}" target="_blank">
+            <button class="icon">
+                <i class='bx bxs-show'></i>
+            </button>
+        </a>
+
+        <a href="/addinvoice/{{order.id}}">
+            <button class="icon">
+                <i class='bx bx-wallet'></i>
+            </button>
+        </a>
+
+        <a href="/editorder/{{order.id}}">
+            <button class="icon">
+                <i class='bx bx-pencil'></i>
+            </button>
+        </a>
+
+        <a href="/deleteorder/{{order.id}}">
+            <button class="icon">
+                <i class='bx bx-trash'></i>
+            </button>
+        </a>
+
+        <a>
+            <button class="icon" onclick="window.history.back()">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+        </a>
+    </div>
+
+    <div class="vizualizer">
+        <div class="item">
+            <div class="name">Client</div>
+            <div class="data">{{ order.vehicle.customer }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Véhicule</div>
+            <div class="data">{{ order.vehicle }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Intervention</div>
+            <div class="data">
+                {% for order in order.order_item.all %}
+                    {{ order.name }}{% if not forloop.last %}<br> {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="name">Description</div>
+            <div class="data">
+                {% if order.description %}
+                    {{ order.description }}
+                {% else %}
+                    Pas de description
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="name">Créé</div>
+            <div class="data">{{ order.created }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Modifié</div>
+            <div class="data">{{ order.modified }}</div>
+        </div>
+    </div>
+
+{% endblock %}

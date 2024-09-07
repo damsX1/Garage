@@ -1,0 +1,153 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Facture{% endblock %}
+
+{% block content %}
+
+    <div class="title">{{ actionStatus }} une facture</div>
+
+    <div class="button-container">
+        <a>
+            <button class="icon" onclick="window.location.reload()">
+                <i class='bx bx-refresh'></i>
+            </button>
+        </a>
+        <a>
+            <button class="icon" onclick="window.history.back()">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+        </a>
+    </div>
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <div class="container">
+            <label for="order">Ordre</label>
+            <input type="text" name="order" value="{% if order.id %}# {{ order.id }}{% elif invoice.order.id %}# {{ invoice.order.id }}{% endif %}" disabled>
+        </div>
+
+        <div class="container">
+            <label>Intervention</label>
+            <div class="intervention-selector">
+                <div class="search">
+                    <input type="text" name="list_intervention" id="interventionInput">
+                    <button type="button" onclick="addIntervention('invoice')"><i class='bx bx-list-plus'></i></button>
+                </div>
+
+                <div class="table">
+                    <table id="table-content">
+                        <tr>
+                            <th>Description</th>
+                            <th>Quantité</th>
+                            <th>Prix Unitaire</th>
+                            <th>TVA</th>
+                            <th>Remise</th>
+                            <th>Montant</th>
+                            <th class="action">Action</th>
+                        </tr>
+                        
+                        {% if order %}
+
+                        {% for order in order.order_item.all %}
+                        <tr>
+                            <td><input type="text" value="{{ order.name }}" name="interventionItem" required></td>
+                            <td><input class="quantity-input" type="number" step="any" value="0" min="0" name="QuantityValue" required></td>
+                            <td><input class="unit-price-input" type="number" step="any" value="0" min="0" name="UnitPriceValue" required></td>
+                            <td><input id="tva" type="number" value="21" name="" disabled></td>
+                            <td><input class="discount-input" type="number" value="0" min="0" max="100" name="DiscountValue" required></td>
+                            <td><input class="amount-input" type="number" value="0" step="any" value="0" name="AmountValue"></td>
+                            <td class="action">
+                                <a onclick="deleteIntervention(this)"><i class='bx bx-trash'></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                        {% elif invoice %}
+
+                        {% for invoice in invoice.invoice_item.all %}
+                        <tr>
+                            <td><input type="text" value="{{ invoice.name }}" name="interventionItem" required></td>
+                            <td><input class="quantity-input" type="number" step="any" value="{{ invoice.quantity }}" min="0" name="QuantityValue" required></td>
+                            <td><input class="unit-price-input" type="number" step="any" value="{{ invoice.unitPrice }}" min="0" name="UnitPriceValue" required></td>
+                            <td><input id="tva" type="number" value="21" name="" disabled></td>
+                            <td><input class="discount-input" type="number" value="{{ invoice.discount }}" min="0" max="100" name="DiscountValue" required></td>
+                            <td><input class="amount-input" type="number" value="{{ invoice.amount }}" step="any" value="0" name="AmountValue"></td>
+                            <td class="action">
+                                <a onclick="deleteIntervention(this)"><i class='bx bx-trash'></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        {% if order %}
+
+        <div class="container">
+            <label for="discount-total">Remise</label>
+            <input id="discount-total" type="text" name="discount-total" value="0" disabled>
+            <input id="discountTotal" type="text" name="discountTotal" value="0" hidden>
+        </div>
+        
+        <div class="container">
+            <label for="HTVA-total">Total HTVA</label>
+            <input id="HTVA-total" type="text" name="HTVA-total" value="0" disabled>
+            <input id="HTVATotal" type="text" name="HTVATotal" value="0" hidden>
+        </div>
+        
+        <div class="container">
+            <label for="TVA-total">Total TVA</label>
+            <input id="TVA-total" type="text" name="TVA-total" value="0" disabled>
+            <input id="TVATotal" type="text" name="TVATotal" value="0" hidden>
+        </div>
+        
+        <div class="container">
+            <label for="amount-total">Total TVAC</label>
+            <input id="amount-total" type="text" name="amount-total" value="0" disabled>
+            <input id="amountTotal" type="text" name="amountTotal" value="0" hidden>
+        </div>
+
+        {% elif invoice %}
+
+        <div class="container">
+            <label for="discount-total">Remise</label>
+            <input id="discount-total" type="text" name="discount-total" value="{{ invoice.discount }}" disabled>
+            <input id="discountTotal" type="text" name="discountTotal" value="{{ invoice.discount }}" hidden>
+        </div>
+        
+        <div class="container">
+            <label for="HTVA-total">Total HTVA</label>
+            <input id="HTVA-total" type="text" name="HTVA-total" value="{{ invoice.totalHTVA }}" disabled>
+            <input id="HTVATotal" type="text" name="HTVATotal" value="{{ invoice.totalHTVA }}" hidden>
+        </div>
+        
+        <div class="container">
+            <label for="TVA-total">Total TVA</label>
+            <input id="TVA-total" type="text" name="TVA-total" value="{{ invoice.totalTVA }}" disabled>
+            <input id="TVATotal" type="text" name="TVATotal" value="{{ invoice.totalTVA }}" hidden>
+        </div>
+        
+        <div class="container">
+            <label for="amount-total">Total TVAC</label>
+            <input id="amount-total" type="text" name="amount-total" value="{{ invoice.totalTVAC }}" disabled>
+            <input id="amountTotal" type="text" name="amountTotal" value="{{ invoice.totalTVAC }}" hidden>
+        </div>
+
+        {% endif %}
+
+        <div class="container">
+            <label for="status">Statut</label>
+            <select name="status" required>
+                <option value="unpaid"{% if invoice.status == 'unpaid' %}selected{% endif %}>Non Payé</option>
+                <option value="paid"{% if invoice.status == 'paid' %}selected{% endif %}>Payé</option>
+            </select>
+        </div>
+
+        <input type="submit" value="Confirmer">
+    </form>
+
+{% endblock %}

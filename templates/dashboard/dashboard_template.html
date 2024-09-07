@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" />
+    <link rel="stylesheet" href="{% static 'css/dash.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>GarageManager | {% block title %}{% endblock %}</title>
+</head>
+<body class="dark">
+
+    <header>
+        <div class="logo"><a href="/">GarageManager</a></div>
+        <div class="container">
+            <div id="themeButton"><i class='bx bx-moon'></i></div>
+            <i class='bx bx-bell'></i>
+            <a href="/logout"><i class='bx bx-log-out'></i></a>
+        </div>
+    </header>
+
+    <div class="sidebar">
+        <ul>
+            <li>
+                <a href="/dashboard">
+                    <i class='bx bx-book-content'></i>
+                    <span class="name">Tableau de bord</span>
+                </a>
+            </li>
+            <li>
+                <a href="/customer">
+                    <i class='bx bx-user'></i>
+                    <span class="name">Client</span>
+                </a>
+            </li>
+            <li>
+                <a href="/vehicle">
+                    <i class='bx bx-car'></i>
+                    <span class="name">Véhicule</span>
+                </a>
+            </li>
+            <li>
+                <a href="/order">
+                    <i class='bx bx-wrench'></i>
+                    <span class="name">Ordre de réparation</span>
+                </a>
+            </li>
+            <li>
+                <a href="/invoice">
+                    <i class='bx bx-wallet'></i>
+                    <span class="name">Facture</span>
+                </a>
+            </li>
+
+            <!-- <li>
+                <a href="/">
+                    <i class='bx bx-briefcase'></i>
+                    <span class="name">Informations</span>
+                </a>
+            </li>
+
+            <div class="bar"></div>
+
+            <li>
+                <a href="/">
+                    <i class='bx bx-chat'></i>
+                    <span class="name">Support</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/">
+                    <i class='bx bx-cog'></i>
+                    <span class="name">Paramètres</span>
+                </a>
+            </li> -->
+
+        </ul>
+    </div>
+
+    <div class="content">
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="message-alert message-success">
+                        <i class='bx bxs-check-circle' id="tag"></i>
+                        <div class="message">{{ message }}</div>
+                        <i class='bx bx-x' id="close" onclick="this.parentElement.style.display='none';"></i>
+                    </div>
+                {% elif message.tags == 'error' %}
+                    <div class="message-alert message-error">
+                        <i class='bx bxs-error-circle' id="tag"></i>
+                        <div class="message">{{ message }}</div>
+                        <i class='bx bx-x' id="close" onclick="this.parentElement.style.display='none';"></i>
+                    </div>
+                {% elif message.tags == 'info' %}
+                    <div class="message-alert message-info">
+                        <i class='bx bx-calendar' id="tag"></i>
+                        <div class="message">{{ message }}</div>
+                        <i class='bx bx-x' id="close" onclick="this.parentElement.style.display='none';"></i>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+
+        {% endblock %}
+
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture # {{ invoice.number_id }}</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+        * {
+          margin: 0;
+          padding: 0;
+          font-family: "Poppins", sans-serif;
+          text-decoration: none;
+          list-style-type: none;
+          box-sizing: border-box;
+        }
+        .container {
+          margin: 20px auto;
+          display: flex;
+          flex-direction: column;
+          gap: 50px;
+          max-width: 840px;
+        }
+        .container .title {
+          font-size: 1rem;
+          font-weight: 600;
+        }
+        .container .text {
+          font-size: 0.85rem;
+        }
+        .container .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .container .header .logo img {
+          border-radius: 100px;
+          width: 110px;
+        }
+        .container .header .invoice-info {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 7.5px;
+        }
+        .container .header .invoice-info .title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          text-transform: uppercase;
+        }
+        .container .info {
+          display: flex;
+          justify-content: space-between;
+        }
+        .container .info .sender, .container .info .receiver {
+          width: 400px;
+          display: flex;
+          flex-direction: column;
+        }
+        .container .table {
+          font-size: 0.9rem;
+          min-height: 350px;
+        }
+        .container .table table {
+          width: 100%;
+          border-spacing: 0;
+        }
+        .container .table table tr {
+          display: flex;
+          justify-content: space-between;
+        }
+        .container .table table tr.head {
+          background-color: #D3D3D3;
+        }
+        .container .table table tr th, .container .table table tr td {
+          padding: 5px 10px;
+          text-align: center;
+        }
+        .container .table table tr .description {
+          width: 25%;
+          text-align: start;
+        }
+        .container .table table tr .quantity {
+          width: 15%;
+          text-align: end;
+        }
+        .container .table table tr .unit-price {
+          width: 20%;
+          text-align: end;
+        }
+        .container .table table tr .tva {
+          width: 15%;
+          text-align: end;
+        }
+        .container .table table tr .discount {
+          width: 15%;
+          text-align: end;
+        }
+        .container .table table tr .amount {
+          width: 15%;
+          text-align: end;
+        }
+        .container .table .detail-amount {
+          margin: 10px 0 0 0;
+          display: flex;
+          justify-content: flex-end;
+        }
+        .container .table .detail-amount .amount-info {
+          display: flex;
+          flex-direction: column;
+          width: 200px;
+        }
+        .container .table .detail-amount .amount-info .amount-item {
+          padding: 3px 10px;
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+        .container .bar {
+          height: 2px;
+          width: 100%;
+          border-radius: 200px;
+          background-color: #000000;
+        }
+        .container .footer .bar {
+          margin: 0 0 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="header">
+            <div class="logo">
+                <img src="http://127.0.0.1:8000/static/img/Car Manager.png" alt="">
+            </div>
+
+            <div class="invoice-info">
+                <div class="title">Facture</div>
+                <div class="text">Numéro de Facture : n° {{ invoice.number_id }}</div>
+                <div class="text">Date : {{ invoice.created|date:"d / m / Y" }}</div>
+                <div class="text">Échéance: À la réception de la facture</div>
+
+            </div>
+        </div>
+
+        <div class="info">
+            <div class="sender">
+                <div class="title">CEDRIC CLASSIC</div>
+                <div class="text">Cédric Beeckmans</div>
+                <div class="text">36, Rue de la procession</div>
+                <div class="text">7850 Petit-Enghien</div>
+                <div class="text">0477851958</div>
+                <div class="text">Cedric.classic@outlook.com</div>
+            </div>
+            <div class="receiver">
+                <div class="title">{{ invoice.order.vehicle.customer }}</div>
+                <div class="text">{{ invoice.order.vehicle.customer.address }}</div>
+                <div class="text">
+                    {% if invoice.order.vehicle.customer.phone %}
+                        {{ invoice.order.vehicle.customer.phone }}
+                    {% endif %}
+                </div>
+                <div class="text">
+                    {% if invoice.order.vehicle.customer.email %}
+                        {{ invoice.order.vehicle.customer.email }}
+                    {% endif %}
+                </div>
+                <div class="text">
+                    {% if invoice.order.vehicle.customer.tva %}
+                        Numéro de TVA {{ invoice.order.vehicle.customer.tva }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="vehicle">
+            <div class="text">{{ invoice.order.vehicle.model }}</div>
+            <div class="text">Chassis: {{ invoice.order.vehicle.chassis }}</div>
+            <div class="text">Km : {{ invoice.order.mileage }}</div>
+        </div>
+
+        <div class="table">
+
+            <table>
+                <tr class="head">
+                    <th class="description">Description</th>
+                    <th class="quantity">Qté</th>
+                    <th class="unit-price">Prix Unitaire</th>
+                    <th class="tva">TVA</th>
+                    <th class="discount">Remise</th>
+                    <th class="amount">Montant</th>
+                </tr>
+                {% if invoice.invoice_item %}
+                {% for invoice in invoice.invoice_item.all %}
+                <tr>
+                    <td class="description">{{ invoice.name }}</td>
+                    <td class="quantity">{{ invoice.quantity }}</td>
+                    <td class="unit-price">{{ invoice.unitPrice }} €</td>
+                    <td class="tva">21 %</td>
+                    <td class="discount">{{ invoice.discount }} %</td>
+                    <td class="amount">{{ invoice.amount }} €</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td>Aucun Intervention</td>
+                </tr>
+                {% endif %}
+            </table>
+
+            <div class="bar"></div>
+        
+            <div class="detail-amount">
+                <div class="amount-info">
+                    <div class="amount-item">
+                        <div class="name">Remise</div>
+                        <div class="data">{{ invoice.discount }} €</div>
+                    </div>
+                    <div class="bar"></div>
+                    <div class="amount-item">
+                        <div class="name">Total HTVA</div>
+                        <div class="data">{{ invoice.totalHTVA }} €</div>
+                    </div>
+                    <div class="amount-item">
+                        <div class="name">TVA 21,00 %</div>
+                        <div class="data">{{ invoice.totalTVA }} €</div>
+                    </div>
+                    <div class="bar"></div>
+                    <div class="amount-item">
+                        <div class="name title">Total TVAC</div>
+                        <div class="data title">{{ invoice.totalTVAC }} €</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="bar"></div>
+            <div class="info ">
+                <div>
+                    <div class="title">CEDRIC CLASSIC</div>
+                    <div class="text">36, Rue de la procession</div>
+                    <div class="text">7850 Petit-Enghien</div>
+                    <div class="text">Numéro de TVA: BE1005332546</div>
+                </div>
+                <div>
+                    <div class="title">Contact</div>
+                    <div class="text">Cédric Beeckmans</div>
+                    <div class="text">0477851958</div>
+                    <div class="text">Cedric.classic@outlook.com</div>
+                </div>
+                <div>
+                    <div class="title">Moyens de paiement</div>
+                    <div class="text">Banque: ING</div>
+                    <div class="text">SWIFT/BIC: BBRUBEBB</div>
+                    <div class="text">IBAN: BE75 3632 3995 0051</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

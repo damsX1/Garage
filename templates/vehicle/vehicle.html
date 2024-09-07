@@ -1,0 +1,55 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Véhicule{% endblock %}
+
+{% block content %}
+
+    <div class="title">Véhicule</div>
+
+    <div class="button-container">
+        <a href="/addvehicle">
+            <button class="add">
+                <i class='bx bx-plus'></i>
+                <p>Ajouter</p>
+            </button>
+        </a>
+    </div>
+
+    <div class="table-container">
+
+        <div class="searchbar">
+            <i class='bx bx-search-alt-2'></i>
+            <input type="text" id="searchBar" onkeyup="searchBar()" placeholder="Recherchez ...">
+        </div>
+        
+        <div class="table">
+            <table id="table-content">
+                <tr>
+                    <th class="id">ID</th>
+                    <th>Client</th>
+                    <th>Modèle</th>
+                    <th>Immatriculation</th>
+                    <th>Chassis</th>
+                    <th>Circulation</th>
+                    <th class="action">Action</th>
+                </tr>
+                {% for vehicle in vehicles %}
+                <tr>
+                    <td class="id"># {{ vehicle.id }}</td>
+                    <td>{{ vehicle.customer }}</td>
+                    <td>{{ vehicle.model }}</td>
+                    <td>{{ vehicle.number_plate }}</td>
+                    <td>{{ vehicle.chassis }}</td>
+                    <td>{{ vehicle.circulation }}</td>
+                    <td class="action">
+                        <a href="/viewvehicle/{{vehicle.id}}"><i class='bx bx-show'></i></a>
+                        <a href="/editvehicle/{{vehicle.id}}"><i class='bx bx-pencil'></i></a>
+                        <a href="/deletevehicle/{{vehicle.id}}"><i class='bx bx-trash'></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

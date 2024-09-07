@@ -1,0 +1,138 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Ordre de réparation{% endblock %}
+
+{% block content %}
+
+    <div class="title">{{ actionStatus }} un ordre de réparation</div>
+
+    <div class="button-container">
+        <a>
+            <button class="icon" onclick="window.location.reload()">
+                <i class='bx bx-refresh'></i>
+            </button>
+        </a>
+        <a>
+            <button class="icon" onclick="window.history.back()">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+        </a>
+    </div>
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <div class="container">
+            <label for="vehicle">Véhicule</label>
+            <div class="input-container">
+                <input type="text" id="inputVehicleId" name="vehicle" value="{% if order.vehicle.id %}{{ order.vehicle.id }}{% endif %}" hidden>
+                <input type="text" class="inputcomplete" id="inputVehicleName" name="vehicle_name" value="{% if order.vehicle %}{{ order.vehicle }}{% endif %}" autocomplete="off" required>
+                <div class="result-list resultListVehicle">
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <label for="mileage">Kilométrage</label>
+            <input type="text" name="mileage" value="{{ order.mileage }}" required>
+        </div>
+
+        <div class="container">
+            <label>Intervention</label>
+            <div class="intervention-selector">
+                <div class="search">
+                    <input type="text" name="list_intervention" id="interventionInput">
+                    <button type="button" onclick="addIntervention('order')"><i class='bx bx-list-plus'></i></button>
+                </div>
+
+                <div class="table order">
+                    <table id="table-content">
+                        <tr>
+                            <th>Description</th>
+                            <th class="action">Action</th>
+                        </tr>
+                        {% if order %}
+
+                        {% for order in order.order_item.all %}
+                        <tr>
+                            <td><input type="text" value="{{ order.name }}" name="interventionItem" required></td>
+                            <td class="action">
+                                <a onclick="deleteIntervention(this)"><i class='bx bx-trash'></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        {% else %}
+
+                        <tr>
+                            <td><input type="text" value="" name="interventionItem" required></td>
+                            <td class="action">
+                                <a onclick="deleteIntervention(this)"><i class='bx bx-trash'></i></a>
+                            </td>
+                        </tr>
+
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <label for="description">Description</label>
+            <textarea name="description">{{ order.description }}</textarea>
+        </div>
+
+        <input type="submit" value="Confirmer">
+    </form>
+
+    <script>
+        // AUTOCOMPLETE VEHICLE
+
+        let vehicleList = [
+        {% for vehicle in vehicles %}
+        {
+            id: '{{vehicle.id}}', 
+            name: '{{vehicle}}'
+        },
+        {% endfor %}
+        ]
+
+        const inputVehicleId = document.getElementById("inputVehicleId");
+        const inputVehicleName = document.getElementById("inputVehicleName");
+        const resultListVehicle = document.querySelector(".resultListVehicle");
+        
+        inputVehicleName.onkeyup = () => {
+            let result = [];
+            let input = inputVehicleName.value;
+            if (input.length) {
+                result = vehicleList.filter((vehicle) => {
+                    return (
+                        vehicle.name.toLowerCase().includes(input.toLowerCase()) ||
+                        vehicle.id.includes(input)
+                    );
+                });
+            }
+        
+            displayVehicle(result);
+        
+            if (!result.length) {
+                resultListVehicle.innerHTML = "";
+            }
+        };
+
+        const displayVehicle = (result) => {
+            const content = result.map((vehicle) => {
+                return `<li onclick="selectInputVehicle(this)" data-id="${vehicle.id}">${vehicle.name}</li>`;
+            });
+            resultListVehicle.innerHTML = `<ul>${content.join("")}</ul>`;
+        };
+
+        const selectInputVehicle = (list) => {
+            const selectedId = list.getAttribute("data-id");
+            inputVehicleId.value = selectedId;
+            inputVehicleName.value = list.innerHTML;
+            resultListVehicle.innerHTML = "";
+        };
+    </script>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/icon.ico' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>GarageManager | Se connecter</title>
+</head>
+<body>
+
+    <header>
+        <a href="/"><div class="logo">GarageManager</div></a>
+        <a href="/login"><button>Connexion</button></a>
+    </header>
+
+    <div class="login-container">
+
+        <div class="title">Connexion</div>
+
+        <div class="message-container">
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                        <div class="message-alert message-success">
+                            <i class='bx bxs-check-circle' id="tag"></i>
+                            <div class="message">{{ message }}</div>
+                            <i class='bx bx-x' id="close" onclick="this.parentElement.style.display='none';"></i>
+                        </div>
+                    {% elif message.tags == 'error' %}
+                        <div class="message-alert message-error">
+                            <i class='bx bxs-error-circle' id="tag"></i>
+                            <div class="message">{{ message }}</div>
+                            <i class='bx bx-x' id="close" onclick="this.parentElement.style.display='none';"></i>
+                        </div>
+                    {% elif message.tags == 'info' %}
+                        <div class="message-alert message-info">
+                            <i class='bx bx-calendar' id="tag"></i>
+                            <div class="message">{{ message }}</div>
+                            <i class='bx bx-x' id="close" onclick="this.parentElement.style.display='none';"></i>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="item">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="item">
+                <label for="password">Mot de passe</label>
+                <input type="password" name="password" required>
+            </div>
+            <input type="submit" value="Se Connecter" id="">
+        </form>
+    </div>
+</body>
+</html>

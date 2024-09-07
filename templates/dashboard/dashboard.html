@@ -1,0 +1,45 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block content %}
+
+<div class="title">Tableau De Bord</div>
+
+<div class="dashboard-card">
+
+    <div class="card">
+        <div class="name">
+            <p>Client</p>
+            <i class='bx bx-user'></i>
+        </div>
+        <div class="data">{{ customerCount }}</div>
+    </div>
+
+    <div class="card">
+        <div class="name">
+            <p>Véhicule</p>
+            <i class='bx bx-car'></i>
+        </div>
+        <div class="data">{{ vehiculeCount }}</div>
+    </div>
+
+    <div class="card">
+        <div class="name">
+            <p>Ordre de réparation</p>
+            <i class='bx bx-wrench'></i>
+        </div>
+        <div class="data">{{ orderCount }}</div>
+    </div>
+
+    <div class="card">
+        <div class="name">
+            <p>Facture</p>
+            <i class='bx bx-wallet'></i>
+        </div>
+        <div class="data">{{ invoiceCount }}</div>
+    </div>
+
+</div>
+
+{% endblock %}

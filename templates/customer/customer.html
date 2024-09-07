@@ -1,0 +1,55 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Client{% endblock %}
+
+{% block content %}
+
+    <div class="title">Client</div>
+
+    <div class="button-container">
+        <a href="/addcustomer">
+            <button class="add">
+                <i class='bx bx-plus'></i>
+                <p>Ajouter</p>
+            </button>
+        </a>
+    </div>
+
+    <div class="table-container">
+
+        <div class="searchbar">
+            <i class='bx bx-search-alt-2'></i>
+            <input type="text" id="searchBar" onkeyup="searchBar()" placeholder="Recherchez ...">
+        </div>
+        
+        <div class="table">
+            <table id="table-content">
+                <tr>
+                    <th class="id">ID</th>
+                    <th>Nom</th>
+                    <th>Adresse</th>
+                    <th>Téléphone</th>
+                    <th>Mail</th>
+                    <th>Tva</th>
+                    <th class="action">Action</th>
+                </tr>
+                {% for customer in customers %}
+                <tr>
+                    <td class="id"># {{ customer.id }}</td>
+                    <td>{{ customer }}</td>
+                    <td>{{ customer.address }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.tva }}</td>
+                    <td class="action">
+                        <a href="/viewcustomer/{{customer.id}}"><i class='bx bx-show'></i></a>
+                        <a href="/editcustomer/{{customer.id}}"><i class='bx bx-pencil'></i></a>
+                        <a href="/deletecustomer/{{customer.id}}"><i class='bx bx-trash'></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

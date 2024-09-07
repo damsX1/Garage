@@ -1,0 +1,49 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Ordre de réparation{% endblock %}
+
+{% block content %}
+
+    <div class="title">Ordre de réparation</div>
+
+    <div class="button-container">
+        <a href="/addorder">
+            <button class="add">
+                <i class='bx bx-plus'></i>
+                <p>Ajouter</p>
+            </button>
+        </a>
+    </div>
+
+    <div class="table-container">
+
+        <div class="searchbar">
+            <i class='bx bx-search-alt-2'></i>
+            <input type="text" id="searchBar" onkeyup="searchBar()" placeholder="Recherchez ...">
+        </div>
+
+        <div class="table">
+            <table id="table-content">
+                <tr>
+                    <th class="id">ID</th>
+                    <th>Client</th>
+                    <th>Véhicule</th>
+                    <th class="action">Action</th>
+                </tr>
+                {% for order in orders %}
+                <tr>
+                    <td class="id"># {{ order.id }}</td>
+                    <td>{{ order.vehicle.customer }}</td>
+                    <td>{{ order.vehicle }}</td>
+                    <td class="action">
+                        <a href="/vieworder/{{order.id}}"><i class='bx bx-show'></i></a>
+                        <a href="/editorder/{{order.id}}"><i class='bx bx-pencil'></i></a>
+                        <a href="/deleteorder/{{order.id}}"><i class='bx bx-trash'></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

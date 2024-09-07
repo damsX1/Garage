@@ -1,0 +1,162 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Véhicule{% endblock %}
+
+{% block content %}
+
+    <div class="title">{{ actionStatus }} un véhicule</div>
+
+    <div class="button-container">
+        <a>
+            <button class="icon" onclick="window.location.reload()">
+                <i class='bx bx-refresh'></i>
+            </button>
+        </a>
+        <a>
+            <button class="icon" onclick="window.history.back()">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+        </a>
+    </div>
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        <div class="container">
+            <label for="customer">Client</label>
+            <div class="input-container">
+                <input type="text" id="inputCustomerId" name="customer" value="{% if vehicle.customer.id %}{{ vehicle.customer.id }}{% endif %}" hidden>
+                <input type="text" class="inputcomplete" id="inputCustomerName" name="customer_name" value="{% if vehicle.customer %}{{ vehicle.customer }}{% endif %}" autocomplete="off">
+                <div class="result-list resultListCustomer">
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <label for="model">Modèle</label>
+            <div class="input-container">
+                <input type="text" id="inputModelId" name="model" value="{% if vehicle.model.id %}{{ vehicle.model.id }}{% endif %}" hidden>
+                <input type="text" class="inputcomplete" id="inputModelName" name="model_name" value="{% if vehicle.model %}{{ vehicle.model }}{% endif %}" autocomplete="off">
+                <div class="result-list resultListModel"></div>
+            </div>
+        </div>
+
+        <div class="container">
+            <label for="number_plate">Plaque D'Immatriculation</label>
+            <input type="text" name="number_plate" value="{% if vehicle.number_plate %}{{ vehicle.number_plate }}{% endif %}" required>
+        </div>
+
+        <div class="container">
+            <label for="chassis">Châssis</label>
+            <input type="text" name="chassis" value="{% if vehicle.chassis %}{{ vehicle.chassis }}{% endif %}" required>
+        </div>
+
+        <div class="container">
+            <label for="circulation">Circulation</label>
+            <input type="date" name="circulation" value="{% if vehicle.circulation %}{{ vehicle.circulation|date:'Y-m-d' }}{% endif %}" required>
+        </div>
+
+        <input type="submit" value="Confirmer">
+    </form>
+
+    <script>
+
+        // AUTOCOMPLETE CUSTOMER
+
+        let customerList = [
+        {% for customer in customers %}
+        {
+            id: '{{customer.id}}', 
+            name: '{{customer}}'
+        },
+        {% endfor %}
+        ]
+
+        const inputCustomerId = document.getElementById("inputCustomerId");
+        const inputCustomerName = document.getElementById("inputCustomerName");
+        const resultListCustomer = document.querySelector(".resultListCustomer");
+        
+        inputCustomerName.onkeyup = () => {
+            let result = [];
+            let input = inputCustomerName.value;
+            if (input.length) {
+                result = customerList.filter((customer) => {
+                    return (
+                        customer.name.toLowerCase().includes(input.toLowerCase()) ||
+                        customer.id.includes(input)
+                    );
+                });
+            }
+        
+            displayCustomer(result);
+        
+            if (!result.length) {
+                resultListCustomer.innerHTML = "";
+            }
+        };
+
+        const displayCustomer = (result) => {
+            const content = result.map((customer) => {
+                return `<li onclick="selectInputCustomer(this)" data-id="${customer.id}">${customer.name}</li>`;
+            });
+            resultListCustomer.innerHTML = `<ul>${content.join("")}</ul>`;
+        };
+
+        const selectInputCustomer = (list) => {
+            const selectedId = list.getAttribute("data-id");
+            inputCustomerId.value = selectedId;
+            inputCustomerName.value = list.innerHTML;
+            resultListCustomer.innerHTML = "";
+        };
+
+        // AUTOCOMPLETE MODEL
+
+        let modelList = [
+        {% for carmodel in carmodels %}
+        {
+            id: '{{carmodel.id}}', 
+            name: '{{carmodel}}'
+        },
+        {% endfor %}
+        ]
+
+        const inputModelId = document.getElementById("inputModelId");
+        const inputModelName = document.getElementById("inputModelName");
+        const resultListModel = document.querySelector(".resultListModel");
+        
+        inputModelName.onkeyup = () => {
+            let result = [];
+            let input = inputModelName.value;
+            if (input.length) {
+                result = modelList.filter((model) => {
+                    return (
+                        model.name.toLowerCase().includes(input.toLowerCase()) ||
+                        model.id.includes(input)
+                    );
+                });
+            }
+        
+            displayModel(result);
+        
+            if (!result.length) {
+                resultListModel.innerHTML = "";
+            }
+        };
+
+        const displayModel = (result) => {
+            const content = result.map((model) => {
+                return `<li onclick="selectInputModel(this)" data-id="${model.id}">${model.name}</li>`;
+            });
+            resultListModel.innerHTML = `<ul>${content.join("")}</ul>`;
+        };
+
+        const selectInputModel = (list) => {
+            const selectedId = list.getAttribute("data-id");
+            inputModelId.value = selectedId;
+            inputModelName.value = list.innerHTML;
+            resultListModel.innerHTML = "";
+        };
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Véhicule{% endblock %}
+
+{% block content %}
+
+    <div class="title">Informations véhicule # {{ vehicle.id }}</div>
+
+    <div class="button-container">
+        <a href="/editvehicle/{{vehicle.id}}">
+            <button class="icon">
+                <i class='bx bx-pencil'></i>
+            </button>
+        </a>
+
+        <a href="/deletevehicle/{{vehicle.id}}">
+            <button class="icon">
+                <i class='bx bx-trash'></i>
+            </button>
+        </a>
+
+        <a href="/vehicle">
+            <button class="icon">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+        </a>
+    </div>
+
+    <div class="vizualizer">
+        <div class="item">
+            <div class="name">Client</div>
+            <div class="data">{{ vehicle.customer }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Modèle</div>
+            <div class="data">{{ vehicle.model }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Plaque D'Immatriculation</div>
+            <div class="data">{{ vehicle.number_plate }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Châssis</div>
+            <div class="data">{{ vehicle.chassis }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Circulation</div>
+            <div class="data">{{ vehicle.circulation }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Créé</div>
+            <div class="data">{{ vehicle.created }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Modifié</div>
+            <div class="data">{{ vehicle.modified }}</div>
+        </div>
+    </div>
+
+{% endblock %}

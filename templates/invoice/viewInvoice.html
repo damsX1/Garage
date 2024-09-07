@@ -1,0 +1,85 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Véhicule{% endblock %}
+
+{% block content %}
+
+    <div class="title">Informations facture # {{ invoice.number_id }}</div>
+
+    <div class="button-container">
+        <a href="/showinvoice/{{invoice.id}}" target="_blank">
+            <button class="icon">
+                <i class='bx bxs-show'></i>
+            </button>
+        </a>
+
+        <a href="/downloadinvoice/{{invoice.id}}" target="_blank">
+            <button class="icon">
+                <i class='bx bxs-download'></i>
+            </button>
+        </a>
+
+        <a href="/editinvoice/{{invoice.id}}">
+            <button class="icon">
+                <i class='bx bx-pencil'></i>
+            </button>
+        </a>
+
+        <a href="/deleteinvoice/{{invoice.id}}">
+            <button class="icon">
+                <i class='bx bx-trash'></i>
+            </button>
+        </a>
+
+        <a href="/invoice">
+            <button class="icon">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+        </a>
+    </div>
+
+    <div class="vizualizer">
+        <div class="item">
+            <div class="name">Client</div>
+            <div class="data">{{ invoice.order.vehicle.customer }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">OR</div>
+            <div class="data"><a href="/viewintervention/{{invoice.order.id}}"># {{ invoice.order.id }}</a></div>
+        </div>
+
+        <div class="item">
+            <div class="name">Intervention</div>
+            <div class="data">
+                {% for invoice in invoice.invoice_item.all %}
+                    {{ invoice.name }}{% if not forloop.last %}<br> {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="name">Montant</div>
+            <div class="data">{{ invoice.totalTVAC }} €</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Statut</div>
+            <div class="data">
+                {% if invoice.status == 'paid' %}Payé{% endif %}
+                {% if invoice.status == 'unpaid' %}Non Payé{% endif %}
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="name">Créé</div>
+            <div class="data">{{ invoice.created }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Modifié</div>
+            <div class="data">{{ invoice.modified }}</div>
+        </div>
+    </div>
+
+{% endblock %}

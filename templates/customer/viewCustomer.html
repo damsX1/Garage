@@ -1,0 +1,71 @@
+{% extends 'dashboard/dashboard_template.html' %}
+
+{% block title %}Client{% endblock %}
+
+{% block content %}
+
+    <div class="title">Informations client # {{ customer.id }}</div>
+
+    <div class="button-container">
+        <a href="/editcustomer/{{customer.id}}">
+            <button class="icon">
+                <i class='bx bx-pencil'></i>
+            </button>
+        </a>
+
+        <a href="/deletecustomer/{{customer.id}}">
+            <button class="icon">
+                <i class='bx bx-trash'></i>
+            </button>
+        </a>
+
+        <a href="/customer">
+            <button class="icon">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+        </a>
+    </div>
+
+    <div class="vizualizer">
+        <div class="item">
+            <div class="name">Prénom</div>
+            <div class="data">{{ customer.first_name }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Nom de famille</div>
+            <div class="data">{{ customer.last_name }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Adresse</div>
+            <div class="data">{{ customer.address }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Téléphone</div>
+            <div class="data">{{ customer.phone }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Mail</div>
+            <div class="data">{{ customer.email }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Tva</div>
+            <div class="data">{% if customer.tva %}{{ customer.tva }}{% else %}No Tva{% endif %}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Créé</div>
+            <div class="data">{{ customer.created }}</div>
+        </div>
+
+        <div class="item">
+            <div class="name">Modifié</div>
+            <div class="data">{{ customer.modified }}</div>
+        </div>
+    </div>
+
+{% endblock %}
