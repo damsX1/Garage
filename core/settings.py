@@ -26,13 +26,11 @@ SECRET_KEY = 'django-insecure-*1_d+)w#^y&%7)ogk_b*1zr59g%dohwsb0y$)z+ht4_y*_+kae
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', "127.0.0.1", 'garage.haadsam.com']
+ALLOWED_HOSTS = ['localhost', 'garage.haadsam.com']
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
-
-
 
 # Application definition
 
